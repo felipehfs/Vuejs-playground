@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Lauchpad</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		.btn {
+			padding: 14px;
+			border: none;
+			background: red;
+			color: white;
+		}
+		html, body {
+			height: 100%;
+		}
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			background: linear-gradient(45deg, #000, #444);
+		}
+		.container {
+			padding: 15px;
+			box-shadow: 2px 3px 4px rgba(0, 0, 0, .5);
+			background: black;
+			border-top-right-radius: 15px;
+			border-bottom-right-radius: 15px;
+			width: 200px;
+			display: grid;
+			grid-gap: 5px;
+			grid-template-columns: 1fr 1fr;
+			grid-row: 1fr 1fr;
+		}
+		.banner {
+			margin-bottom: 15px;
+		}
+		.banner h1 {
+			color: white;
+			text-align: center;
+			text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<banner></banner>
+		<launchpad :playlist="samplers"></launchpad>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		Vue.component('banner', {
+			template: `<div class="banner">
+					<h1>Funky launchpad</h1>
+			</div>`
+		})
+		Vue.component("launchpad", {
+			template: `
+					<div class="container">
+						<botao v-for="song in playlist" 
+							:content="song.name" 
+							:src="song.source" 
+							:loop="song.loop"
+							:pitch="song.pitch"></botao> 
+					</div>
+			`,
+			props: ['playlist']
+		})
+
+		Vue.component("botao", {
+			template: `<button class="btn" @click="tocarAudio">{{content}}</button>`,
+			props: ['content', 'src', 'loop','pitch'],
+			data: function() {
+				return {
+					audio: new Audio(this.src)
+				} 
+			},
+			methods: {
+				tocarAudio: function () {
+					if(this.loop){
+							this.audio.loop = true		
+					}
+					if(this.pitch !== undefined){
+						this.audio.playbackRate = this.pitch
+						console.log(this.audio.playbackRate)
+					}
+					if(this.audio.paused){
+						this.audio.load()
+						this.audio.play()
+					} else {
+						this.audio.pause()
+						
+					}
+					
+				}
+			}})
+		let app = new Vue({
+			el: "#app",
+			data: {
+				samplers: [
+					{name: "Guitar 1", source: 'assets/GuitarC_120E-02.wav', pitch: 1, loop: true},
+					{name: "Bass 1", source: 'assets/BassC_120E-03.wav', pitch: 1, loop: true},
+					{name: "Bass 2", source: 'assets/BassC_120E-02.wav', pitch:1 , loop: true},
+					{name: "Organ 1", source: 'assets/OrganC_120E-01.wav', pitch: 1, loop: true}
+				]
+			}
+		})
+	</script>
+</body>
+</html>

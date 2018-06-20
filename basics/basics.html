@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Basics of vuejs</title>
+	<style>
+		.button {
+			padding: 15px;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<counter :value="counter" @increment="incr"></counter>
+		<counter :value='counter' @increment="incr"></counter>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+
+		Vue.component('counter', {
+			template: `<button v-on:click="increment" class="button">{{ value }}</button>`,
+			props: ['value'],
+			methods: {
+				increment: function () {
+					this.$emit('increment')
+				}
+			}
+		})
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				counter: 0,
+			},
+			methods: {
+				incr: function(value){
+					this.counter++
+				}
+			}
+		})
+	</script>
+</body>
+</html>
