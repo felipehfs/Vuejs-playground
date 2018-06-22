@@ -31,7 +31,7 @@
 			background: black;
 			border-top-right-radius: 15px;
 			border-bottom-right-radius: 15px;
-			width: 200px;
+			width: (100% - 500px);
 			display: grid;
 			grid-gap: 5px;
 			grid-template-columns: 1fr 1fr;
@@ -62,7 +62,8 @@
 		Vue.component("launchpad", {
 			template: `
 					<div class="container">
-						<botao v-for="song in playlist" 
+						<botao v-for="(song, index) in playlist"
+							:key="index" 
 							:content="song.name" 
 							:src="song.source" 
 							:loop="song.loop"
@@ -87,7 +88,6 @@
 					}
 					if(this.pitch !== undefined){
 						this.audio.playbackRate = this.pitch
-						console.log(this.audio.playbackRate)
 					}
 					if(this.audio.paused){
 						this.audio.load()
